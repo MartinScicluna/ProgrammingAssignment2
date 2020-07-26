@@ -1,15 +1,44 @@
-## Put comments here that give an overall description of what your
-## functions do
+## ASSIGNMENT 2 - LEXICAL SCOPING
+## ==============================
 
-## Write a short comment describing this function
+## OBJECTIVE: 
+## A pair of functions that, between them, create and cache the inverse of a matrix.
+
+## FUNCTION 1: makeCacheMatrix
+## ---------------------------
+## Creates a special matrix object that can cache its inverse.
+## The input matrix is assumed to be a square, invertible matrix.
 
 makeCacheMatrix <- function(x = matrix()) {
-
+    inverted <- NULL
+    set <- function(y) {
+        x <<- y
+        inverted <<- NULL
+    }
+    get <- function() x
+    setinverse <- function(solve) inverted <<- solve
+    getinverse <- function() inverted
+    list(set = set, 
+         get = get,
+         setinverse = setinverse,
+         getinverse = getinverse)
+    print(set,get,setinverse,getinverse)
 }
 
-
-## Write a short comment describing this function
+## FUNCTION 2: cacheSolve
+## ----------------------
+## Computes the inverse of a special matrix returned by makeCacheMatrix
+## If the inverse has already been calculated and cached, and the matrix hasn't been 
+## changed, the inverse is retrieved from the cache
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    inverted <- x$getinverse()
+    if(!is.null(inverted)) {
+        message("Getting cached data")
+        return(inverted)
+    }
+    matrixdata <- x$get()
+    inverted <- solve(matrixdata, ...)
+    x$setinverse(inverted)
+    inverted
 }
